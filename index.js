@@ -45,6 +45,10 @@ exports.setup = function (config, cb) {
 	});	
 };
 
+exports.id = function () {
+	return defaults.id;
+};
+
 exports.subscribe = function (channel, cb) {
 	// subscribe to a channel
 	sub.subscribe(channel, cb);

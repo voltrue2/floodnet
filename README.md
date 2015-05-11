@@ -50,6 +50,14 @@ options: {
 
 ***
 
+#### .id()
+
+Returns a unique ID of floodnet module. 
+
+This ID is unique per process.
+
+***
+
 #### .subscribe(channel [string], handler [function])
 
 Joins a meshnet work channel.
