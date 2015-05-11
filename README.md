@@ -56,6 +56,8 @@ Joins a meshnet work channel.
 
 `handler` function will be called on each message recieved in the channel from the other mesh nodes.
 
+**NOTE**: When your application process successfully subscribes to a channel, it will publish a `hello` message to the other mesh nodes in the channel.
+
 ##### handler function
 
 The module will be passing 2 arguments to `handler` function on each message recieved.
