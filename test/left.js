@@ -17,4 +17,16 @@ flood.setup({ debug: false }, function (error) {
 		flood.publish('test', Date.now());
 	}, 50);
 
+	setTimeout(function () {
+		console.log('left is leaving...');
+		flood.unsubscribe('test');		
+	}, 4000);
+
+	setTimeout(function () {
+		console.log('quiting...');
+		flood.exit(function () {
+			console.log('quit');
+		});
+	}, 5000);
+
 });

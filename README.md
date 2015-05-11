@@ -77,10 +77,26 @@ The module will be passing 2 arguments to `handler` function on each message rec
 
 ***
 
+#### .unsubscribe(channel [string])
+
+Leaves the channel and stops revieving messages from the other mesh nodes.
+
+***
+
 #### .publish(channel [string], message [mix])
 
 Sends a message to the other nodes in the same channel.
 
 `message` can either be a string or an object.
+
+***
+
+#### .exit(callback [function])
+
+Gracefully closes the connection to redis and stops all pub/sub operations.
+
+This function waits for all pending messages in the memory before it terminates the connection to redis.
+
+***
 
 ***

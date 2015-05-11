@@ -5,6 +5,9 @@ var defaults = require('./src/lib/defaults');
 var pub = require('./src/pub');
 var sub = require('./src/sub');
 
+var HELLO = 'hello';
+var BYE = 'bye';
+
 exports.setup = function (config, cb) {
 	
 	if (config) {
@@ -46,11 +49,24 @@ exports.subscribe = function (channel, cb) {
 	// subscribe to a channel
 	sub.subscribe(channel, cb);
 	// announce its subscription to the others in the channel
-	exports.publish(channel, 'hello');
+	exports.publish(channel, HELLO);
+};
+
+exports.unsubscribe = function (channel) {
+	// unsubscribe from a channel
+	sub.unsubscribe(channel);
+	// announce its unsubscription to the others in the channel
+	exports.publish(channel, BYE);
 };
 
 exports.publish = function (channel, data) {
 	pub.publish(channel, data);
+};
+
+exports.exit = function (cb) {
+	pub.exit(function () {
+		sub.exit(cb);
+	});
 };
 
 function log() {

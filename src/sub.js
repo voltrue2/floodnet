@@ -5,7 +5,6 @@ var defaults = require('./lib/defaults');
 var encoder = require('./lib/encoder');
 var redis = require('redis');
 var client;
-var channels = [];
 
 exports.setup = function (cb) {
 
@@ -38,12 +37,7 @@ exports.exit = function (cb) {
 };
 
 exports.subscribe = function (channel, cb) {
-
-	if (channels.indexOf(channel) !== -1) {
-		throw new Error('alreadySubscribed: [' + channel + ']');
-	}
-
-	// FIXME: don't want to subscribe it it's a master process...
+	// FIXME: don't want to subscribe if it's a master process...
 	client.subscribe(defaults.config.prefix + channel);
 	client.on('message', function (key, packed) {
 		var unpacked = encoder.unpack(packed);
@@ -55,4 +49,8 @@ exports.subscribe = function (channel, cb) {
 
 		cb(key, unpacked);
 	});
+};
+
+exports.unsubscribe = function (channel) {
+	client.unsubscribe(channel, 0);
 };
