@@ -1,0 +1,67 @@
+{
+  "name": "floodnet",
+  "version": "0.0.1",
+  "author": "Nobuyori Takahashi",
+  "description": "A module to handle mesh network using redis.",
+  "dependencies": {
+    "redis": "0.12.1",
+    "node-uuid": "1.4.1"
+  },
+  "devDependencies": {
+    "gracenode": "1.6.3",
+    "mocha": "1.20.1"
+  },
+  "jshintConfig": {
+    "node": true,
+    "bitwise": false,
+    "camelcase": false,
+    "curly": true,
+    "eqeqeq": true,
+    "forin": false,
+    "immed": true,
+    "latedef": false,
+    "newcap": true,
+    "noarg": true,
+    "noempty": true,
+    "undef": true,
+    "unused": true,
+    "nonew": true,
+    "white": true,
+    "maxdepth": 5,
+    "quotmark": "single",
+    "globals": {
+      "mocha": false,
+      "describe": false,
+      "it": false,
+      "before": false,
+      "beforeEach": false,
+      "after": false,
+      "afterEach": false
+    }
+  },
+  "engine": "node >= 0.10.20",
+  "contributors": [],
+  "keywords": [
+    "meshnet",
+    "mesh network",
+    "meshnetwork",
+    "discover",
+    "node"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/voltrue2/floodnet.git"
+  },
+  "bugs": {
+    "url": "https://github.com/voltrue2/foodnet/issues"
+  },
+  "homepage": "https://github.com/voltrue2/floodnet"
+}
