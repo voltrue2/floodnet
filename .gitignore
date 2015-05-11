@@ -1,0 +1,3 @@
+daemon
+node_modules/
+precommit.sh
