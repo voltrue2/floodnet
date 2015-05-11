@@ -48,6 +48,8 @@ options: {
 }
 ```
 
+***
+
 #### .subscribe(channel [string], handler [function])
 
 Joins a meshnet work channel.
