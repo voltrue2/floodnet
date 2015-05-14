@@ -1,6 +1,18 @@
 var flood = require('../');
 var fs = require('./fs');
 
+flood.on('end', function (type) {
+	console.log('end', type);
+});
+
+flood.on('connect', function (type) {
+	console.log('connect', type);
+});
+
+flood.on('error', function (error, type) {
+	console.log('error', error, type);
+});
+
 flood.setup({ debug: false }, function (error) {
 
 	if (error) {

@@ -9,9 +9,9 @@ var sub = require('./src/sub');
 var HELLO = 'hello';
 var BYE = 'bye';
 
-exports = new EventEmitter();
+module.exports = new EventEmitter();
 
-exports.setup = function (config, cb) {
+module.exports.setup = function (config, cb) {
 	
 	if (config) {
 		for (var key in config) {
@@ -48,34 +48,42 @@ exports.setup = function (config, cb) {
 	});	
 };
 
-exports.id = function () {
+module.exports.id = function () {
 	return defaults.id;
 };
 
-exports.subscribe = function (channel, cb) {
+module.exports.subscribe = function (channel, cb) {
 	// subscribe to a channel
 	sub.subscribe(channel, cb);
 	// announce its subscription to the others in the channel
-	exports.publish(channel, HELLO);
+	module.exports.publish(channel, HELLO);
 };
 
-exports.unsubscribe = function (channel) {
+module.exports.unsubscribe = function (channel) {
 	// unsubscribe from a channel
 	sub.unsubscribe(channel);
 	// announce its unsubscription to the others in the channel
-	exports.publish(channel, BYE);
+	module.exports.publish(channel, BYE);
 };
 
-exports.publish = function (channel, data) {
+module.exports.publish = function (channel, data) {
 	pub.publish(channel, data);
 };
 
-exports.exit = function (cb) {
+module.exports.exit = function (cb) {
 	pub.exit(function () {
 		sub.exit(cb);
 	});
 };
 
-pub.on('end', function () {
-	exports.emit();
+defaults.event.on('end', function (type) {
+	module.exports.emit('end', type);
+});
+
+defaults.event.on('connect', function (type) {
+	module.exports.emit('connect', type);
+});
+
+defaults.event.on('error', function (error, type) {
+	module.exports.emit('error', error, type);
 });

@@ -13,12 +13,12 @@ exports.setup = function (cb) {
 		client = connect();
 		
 		client.on('end', function () {
-			defaults.event.emit('end');
+			defaults.event.emit('end', 'sub');
 			defaults.log('connection closed');
 		});
 
 		client.on('error', function (error) {
-			defaults.event.emit('error', error);
+			defaults.event.emit('error', error, 'sub');
 
 			defaults.log('connection failed');
 
@@ -28,7 +28,7 @@ exports.setup = function (cb) {
 		});
 
 		client.on('connect', function () {
-			defaults.event.emit('connect');
+			defaults.event.emit('connect', 'sub');
 
 			if (defaults.config.options && defaults.config.options.auth_pass) {
 				var pass = defaults.config.options.auth_pass;

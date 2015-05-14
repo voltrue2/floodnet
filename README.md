@@ -118,4 +118,57 @@ This function waits for all pending messages in the memory before it terminates 
 
 ***
 
+## Events
+
+`floodnet` module emits some events.
+
+#### connect
+
+`connect` event is emitted when the module is connected to redis and is ready to send and recieve packets.
+
+The listener callback will have a string passed from the event.  
+
+The string values are either `pub` or `sub` to indicate either publish connection or subscribe connection.
+
+**NOTE**: When the module is set up, both `pub` and `sub` will be emitted.
+
+```javascript
+var flood = require('floodnet');
+flood.on('connect', function (type) {
+	console.log(type);
+});
+```
+
+#### end
+
+`end` event will be emitted when the module is closing the connection to redis. 
+
+Calling `.exit()` will also cause this event to be emitted.
+
+The listener callback will have a string passed from the event.  
+
+The string values are either `pub` or `sub` to indicate either publish connection or subscribe connection.
+
+**NOTE**: When the module is closing the connections, both `pub` and `sub` will be emitted.
+
+```javascript
+var flood = require('floodnet');
+flood.on('end', function (type) {
+	console.log(type);
+});
+```
+
+#### error
+
+`error` event will be emitted when there is an exception or when the module loses its connection to redis unexpectedly.
+
+The listener callback will have 2 arguments passed. The first argument is an error object and the second argument is the connection type (pub/sub). 
+
+```javascript
+var flood = require('floodnet');
+flood.on('error', function (error, type) {
+	console.error(error, type);
+});
+```
+
 ***
