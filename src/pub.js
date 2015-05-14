@@ -10,20 +10,41 @@ exports.setup = function (cb) {
 
 	process.on('message', handleMsgFromWorker);
 
-	client = redis.createClient(
-		defaults.config.port,
-		defaults.config.host,
-		defaults.config.options
-	);
+	connect();
 
-	if (defaults.config.options && defaults.config.options.auth_pass) {
-		return client.auth(defaults.config.options.auth_pass, cb);
-	}
+	client.on('end', function () {
+		defaults.event.emit('end');
+		defaults.log('connection closed');
+	});
 
-	cb();
+	client.on('error', function (error) {
+		defaults.events.emit('error', error);	
+
+		defaults.log('connection failed');
+
+		if (defaults.config.reconnect && error.message === defaults.ECONNREFUSED) {
+
+			defaults.log('auto-reconnecting');
+
+			connect();
+		}
+	});
+
+	client.on('connect', function () {
+		defaults.events.emit('connect');		
+
+		if (defaults.config.options && defaults.config.options.auth_pass) {
+			return client.auth(defaults.config.options.auth_pass, cb);
+		}
+
+		cb();
+	});
 };
 
 exports.exit = function (cb) {
+
+	defaults.log('closing connection');
+
 	client.quit(cb);
 };
 
@@ -46,6 +67,14 @@ exports.publish = function (channel, data) {
 	};
 	process.send(encoder.pack(msg));
 };
+
+function connect() {
+	client = redis.createClient(
+		defaults.config.port,
+		defaults.config.host,
+		defaults.config.options
+	);
+}
 
 function handleMsgFromWorker(packed) {
 

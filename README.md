@@ -23,9 +23,20 @@ If `config` object is not given, the module will run with default values.
 	host: '127.0.0.1', // default
 	port: 6379, // default
 	prefix: '__floodnet__' // default
+	reconnect: true // default
 	options: null // default
 }
 ```
+
+###### `host` is the IP address that redis is running.
+
+###### `port` is the port number that redis is listening to.
+
+###### `prefix` is a string value to be used as a prefix for redis' pubsub key.
+
+###### `reconnect` is a boolean value to switch on/off auto-reconnecting when the connection to redis is unexpectedly closed.
+
+###### `options` is an object to configure redis client. The details are shown below.
 
 ##### Option Object
 

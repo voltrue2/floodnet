@@ -10,18 +10,35 @@ exports.setup = function (cb) {
 
 	if (cluster.isMaster) {
 
-		client = redis.createClient(
-			defaults.config.port,
-			defaults.config.host,
-			defaults.config.options
-		);
+		client = connect();
+		
+		client.on('end', function () {
+			defaults.event.emit('end');
+			defaults.log('connection closed');
+		});
 
-		if (defaults.config.options && defaults.config.options.auth_pass) {
-			var pass = defaults.config.options.auth_pass;
-			return client.auth(pass, cb);
-		}
+		client.on('error', function (error) {
+			defaults.event.emit('error', error);
 
-		return cb();
+			defaults.log('connection failed');
+
+			if (defaults.config.reconnect && error.message === defaults.ECONNREFUSED) {
+				connect();
+			}
+		});
+
+		client.on('connect', function () {
+			defaults.event.emit('connect');
+
+			if (defaults.config.options && defaults.config.options.auth_pass) {
+				var pass = defaults.config.options.auth_pass;
+				return client.auth(pass, cb);
+			}
+
+			cb();
+		});
+
+		return;
 	}
 
 	return cb();
@@ -54,3 +71,11 @@ exports.subscribe = function (channel, cb) {
 exports.unsubscribe = function (channel) {
 	client.unsubscribe(channel, 0);
 };
+
+function connect() {
+	return redis.createClient(
+		defaults.config.port,
+		defaults.config.host,
+		defaults.config.options
+	);
+}

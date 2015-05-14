@@ -1,5 +1,6 @@
 'use strict';
 
+var EventEmitter = require('events').EventEmitter;
 var redis = require('redis');
 var defaults = require('./src/lib/defaults');
 var pub = require('./src/pub');
@@ -7,6 +8,8 @@ var sub = require('./src/sub');
 
 var HELLO = 'hello';
 var BYE = 'bye';
+
+exports = new EventEmitter();
 
 exports.setup = function (config, cb) {
 	
@@ -22,23 +25,23 @@ exports.setup = function (config, cb) {
 		redis.debug_mode = defaults.config.debug;
 	}
 
-	log('setting up [ID: ' + defaults.id + ']');
+	defaults.log('setting up [ID: ' + defaults.id + ']');
 
 	pub.setup(function (error) {
 		if (error) {
-			log(error);
+			defaults.log(error);
 			return cb(error);
 		}
 
-		log('publisher setup [done]');
+		defaults.log('publisher setup [done]');
 
 		sub.setup(function (error2) {
 			if (error2) {
-				log(error2);
+				defaults.log(error2);
 				return cb(error2);
 			}
 
-			log('subscriber setup [done]');
+			defaults.log('subscriber setup [done]');
 			
 			cb();
 		});
@@ -73,14 +76,6 @@ exports.exit = function (cb) {
 	});
 };
 
-function log() {
-	
-	if (!defaults.config.debug) {
-		return;
-	}
-	
-	for (var i in arguments) {
-		var arg = '[floodnet] ' + arguments[i];
-		console.log(arg);
-	}
-}
+pub.on('end', function () {
+	exports.emit();
+});

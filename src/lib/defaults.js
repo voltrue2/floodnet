@@ -1,6 +1,11 @@
 'use strict';
 
 var uuid = require('node-uuid');
+var EventEmitter = require('events').EventEmitter;
+
+exports.ECONNREFUSED = 'ECONNREFUSED';
+
+exports.event = new EventEmitter();
 
 /*
 options: {
@@ -22,7 +27,20 @@ exports.config = {
 	host: '127.0.0.1',
 	port: 6379,
 	prefix: '__floodnet__',
+	reconnect: true,
 	options: null
 };
 
 exports.id = uuid.v4();
+
+exports.log = function () {
+
+	if (!exports.config.debug) {
+		return;
+	}
+
+	for (var i in arguments) {
+		var arg = '[floodnet] ' + arguments[i];
+		console.log(arg);
+	}
+};
