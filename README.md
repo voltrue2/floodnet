@@ -167,6 +167,8 @@ flood.on('end', function (type) {
 
 The listener callback will have 1 argument which is the ID of the new added mesh node.
 
+**NOTE:** If `heartbeatInterval` is set to 0, this event will NOT be emitted
+
 ```javascript
 var flood = require('floodnet');
 flood.on('nodeAdded', function (newNodeId) {
@@ -179,6 +181,8 @@ flood.on('nodeAdded', function (newNodeId) {
 `nodeRemoved` event will be emitted when a mesh node in the same channel has timed out and considered offline.
 
 The listener callback will have 1 argument which is the ID of the removed mesh node.
+
+**NOTE:** If `heartbeatInterval` is set to 0, this event will NOT be emitted
 
 ```javascript
 var flood = require('floodnet');
