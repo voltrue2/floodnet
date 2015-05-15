@@ -31,7 +31,7 @@ exports.config = {
 	port: 6379,
 	prefix: '__floodnet__',
 	reconnect: true,
-	heartbeatInterval: 10000,
+	heartbeatInterval: 0,
 	options: null
 };
 
