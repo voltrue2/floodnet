@@ -14,13 +14,13 @@ exports.setup = function (cb) {
 		
 		client.on('end', function () {
 			defaults.event.emit('end', 'sub');
-			defaults.log('connection closed');
+			defaults.log('subscriber connection closed');
 		});
 
 		client.on('error', function (error) {
 			defaults.event.emit('error', error, 'sub');
 
-			defaults.log('connection failed');
+			defaults.log('subscriber connection failed');
 
 			if (defaults.config.reconnect && error.message === defaults.ECONNREFUSED) {
 				connect();
@@ -62,6 +62,18 @@ exports.subscribe = function (channel, cb) {
 		if (unpacked.id === defaults.id) {
 			// publish from myself > ignore it
 			return;
+		}
+
+		if (unpacked.data === defaults.HELLO) {
+			defaults.event.emit(defaults.HELLO, channel, unpacked);
+		}
+
+		if (unpacked.data === defaults.BYE) {
+			defaults.event.emit(defaults.BYE, channel, unpacked);
+		}
+
+		if (unpacked.data === defaults.HEARTBEAT) {
+			defaults.event.emit(defaults.HEARTBEAT, channel, unpacked);
 		}
 
 		cb(key, unpacked);

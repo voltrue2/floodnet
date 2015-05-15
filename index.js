@@ -6,8 +6,10 @@ var defaults = require('./src/lib/defaults');
 var pub = require('./src/pub');
 var sub = require('./src/sub');
 
-var HELLO = 'hello';
-var BYE = 'bye';
+// a map of online mesh nodes
+// this is maintained by heartbeat
+var nodes = {};
+var online = false;
 
 module.exports = new EventEmitter();
 
@@ -53,17 +55,21 @@ module.exports.id = function () {
 };
 
 module.exports.subscribe = function (channel, cb) {
+	// add a new channel
+	if (!nodes[channel]) {
+		nodes[channel] = {};
+	}
 	// subscribe to a channel
 	sub.subscribe(channel, cb);
 	// announce its subscription to the others in the channel
-	module.exports.publish(channel, HELLO);
+	module.exports.publish(channel, defaults.HELLO);
 };
 
 module.exports.unsubscribe = function (channel) {
 	// unsubscribe from a channel
 	sub.unsubscribe(channel);
 	// announce its unsubscription to the others in the channel
-	module.exports.publish(channel, BYE);
+	module.exports.publish(channel, defaults.BYE);
 };
 
 module.exports.publish = function (channel, data) {
@@ -77,13 +83,68 @@ module.exports.exit = function (cb) {
 };
 
 defaults.event.on('end', function (type) {
+	online = false;
 	module.exports.emit('end', type);
 });
 
 defaults.event.on('connect', function (type) {
+	online = true;
+	startHeartbeat();
 	module.exports.emit('connect', type);
 });
 
 defaults.event.on('error', function (error, type) {
 	module.exports.emit('error', error, type);
 });
+
+defaults.event.on('heartbeat', function (channel, msg) {
+
+	var now = Date.now();	
+
+	if (!nodes[channel]) {
+		nodes[channel] = {};
+	}
+
+	if (!nodes[channel][msg.id]) {
+		defaults.log('new mesh node online: ' + msg.id);
+		nodes[channel][msg.id] = now;
+		module.exports.emit('nodeAdded', msg.id);
+	}
+
+	nodes[channel][msg.id] = now;
+});
+
+function checkNodeStats(channel) {
+	if (nodes[channel]) {
+		var now = Date.now();
+		var exp = defaults.config.heartbeatInterval * 2;
+		for (var id in nodes[channel]) {
+			var nodeLastSeen = nodes[channel][id];
+			if (now - nodeLastSeen >= exp) {
+				defaults.log('mesh node has timed out and considered off line: ' + id);
+				delete nodes[channel][id];
+				module.exports.emit('nodeRemoved', id);
+			}
+		}
+	}
+}
+
+function startHeartbeat() {
+	var heartbeat = function () {
+
+		if (!online) {
+			return;
+		}
+
+		for (var channel in nodes) {
+			checkNodeStats(channel);
+			pub.publish(channel, defaults.HEARTBEAT);
+			defaults.log('send heartbeat: ' + channel);
+		}
+		setTimeout(heartbeat, defaults.config.heartbeatInterval);
+	};
+
+	defaults.log('start heartneat at: ' + defaults.config.heartbeatInterval + 'ms');
+
+	heartbeat();
+}

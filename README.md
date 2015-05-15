@@ -24,6 +24,7 @@ If `config` object is not given, the module will run with default values.
 	port: 6379, // default
 	prefix: '__floodnet__' // default
 	reconnect: true // default
+	heartbeatInterval: 10000 // default
 	options: null // default
 }
 ```
@@ -35,6 +36,8 @@ If `config` object is not given, the module will run with default values.
 ###### `prefix` is a string value to be used as a prefix for redis' pubsub key.
 
 ###### `reconnect` is a boolean value to switch on/off auto-reconnecting when the connection to redis is unexpectedly closed.
+
+###### `heartbeatInterval` is a interval number in millisecond to check the availability of other mesh nodes in the same channel.
 
 ###### `options` is an object to configure redis client. The details are shown below.
 
@@ -155,6 +158,32 @@ The string values are either `pub` or `sub` to indicate either publish connectio
 var flood = require('floodnet');
 flood.on('end', function (type) {
 	console.log(type);
+});
+```
+
+#### nodeAdded
+
+`nodeAdded` event will be emitted when there is a new mesh node in the same channel.
+
+The listener callback will have 1 argument which is the ID of the new added mesh node.
+
+```javascript
+var flood = require('floodnet');
+flood.on('nodeAdded', function (newNodeId) {
+	// do something
+});
+```
+
+#### nodeRemoved
+
+`nodeRemoved` event will be emitted when a mesh node in the same channel has timed out and considered offline.
+
+The listener callback will have 1 argument which is the ID of the removed mesh node.
+
+```javascript
+var flood = require('floodnet');
+flood.on('nodeRemoved', function (newNodeId) {
+	// do something
 });
 ```
 

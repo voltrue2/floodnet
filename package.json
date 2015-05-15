@@ -1,6 +1,6 @@
 {
   "name": "floodnet",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "author": "Nobuyori Takahashi",
   "description": "A module to handle mesh network using redis.",
   "dependencies": {
@@ -42,7 +42,10 @@
   "engine": "node >= 0.10.20",
   "contributors": [],
   "keywords": [
+    "flood",
+    "mesh",
     "meshnet",
+    "network",
     "mesh network",
     "meshnetwork",
     "discover",

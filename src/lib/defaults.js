@@ -3,6 +3,9 @@
 var uuid = require('node-uuid');
 var EventEmitter = require('events').EventEmitter;
 
+exports.HELLO = 'hello';
+exports.BYE = 'bye';
+exports.HEARTBEAT = 'heartbeat';
 exports.ECONNREFUSED = 'ECONNREFUSED';
 
 exports.event = new EventEmitter();
@@ -28,6 +31,7 @@ exports.config = {
 	port: 6379,
 	prefix: '__floodnet__',
 	reconnect: true,
+	heartbeatInterval: 10000,
 	options: null
 };
 

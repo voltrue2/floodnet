@@ -14,13 +14,13 @@ exports.setup = function (cb) {
 
 	client.on('end', function () {
 		defaults.event.emit('end', 'pub');
-		defaults.log('connection closed');
+		defaults.log('publisher connection closed');
 	});
 
 	client.on('error', function (error) {
 		defaults.event.emit('error', error, 'pub');	
 
-		defaults.log('connection failed');
+		defaults.log('publisher connection failed');
 
 		if (defaults.config.reconnect && error.message === defaults.ECONNREFUSED) {
 
@@ -43,7 +43,7 @@ exports.setup = function (cb) {
 
 exports.exit = function (cb) {
 
-	defaults.log('closing connection');
+	defaults.log('publisher closing connection');
 
 	client.quit(cb);
 };

@@ -1,7 +1,7 @@
 var flood = require('../');
 var fs = require('./fs');
 
-flood.setup({ debug: false }, function (error) {
+flood.setup({ debug: false, reconnect: false }, function (error) {
 
 	if (error) {
 		return console.error(error);
