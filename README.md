@@ -24,7 +24,7 @@ If `config` object is not given, the module will run with default values.
 	port: 6379, // default
 	prefix: '__floodnet__' // default
 	reconnect: true // default
-	heartbeatInterval: 10000 // default
+	heartbeatInterval: 0 // default
 	options: null // default
 }
 ```
@@ -37,7 +37,7 @@ If `config` object is not given, the module will run with default values.
 
 ###### `reconnect` is a boolean value to switch on/off auto-reconnecting when the connection to redis is unexpectedly closed.
 
-###### `heartbeatInterval` is a interval number in millisecond to check the availability of other mesh nodes in the same channel.
+###### `heartbeatInterval` is a interval number in millisecond to check the availability of other mesh nodes in the same channel. By setting this to 0, you can turn this feature off.
 
 ###### `options` is an object to configure redis client. The details are shown below.
 

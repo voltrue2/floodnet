@@ -130,6 +130,11 @@ function checkNodeStats(channel) {
 }
 
 function startHeartbeat() {
+
+	if (!defaults.config.hearbeatInterval) {
+		return;
+	}
+
 	var heartbeat = function () {
 
 		if (!online) {
