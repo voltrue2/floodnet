@@ -1,6 +1,6 @@
 {
   "name": "floodnet",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "author": "Nobuyori Takahashi",
   "description": "A module to handle mesh network using redis.",
   "dependencies": {
@@ -9,7 +9,10 @@
   },
   "devDependencies": {
     "gracenode": "1.6.3",
-    "mocha": "1.20.1"
+    "mocha": "1.20.1",
+    "gracelog": "0.4.1",
+    "winston": "1.0.0",
+    "log4js": "0.6.25"
   },
   "jshintConfig": {
     "node": true,

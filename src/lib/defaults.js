@@ -1,5 +1,6 @@
 'use strict';
 
+var NAME = '[floodnet] ';
 var uuid = require('node-uuid');
 var EventEmitter = require('events').EventEmitter;
 
@@ -32,6 +33,7 @@ exports.config = {
 	prefix: '__floodnet__',
 	reconnect: true,
 	heartbeatInterval: 0,
+	logger: null,
 	options: null
 };
 
@@ -39,12 +41,36 @@ exports.id = uuid.v4();
 
 exports.log = function () {
 
+	if (exports.config.logger) {
+		for (var key in arguments) {
+			exports.config.logger.info(arguments[key]);
+		}
+	}
+
 	if (!exports.config.debug) {
 		return;
 	}
 
 	for (var i in arguments) {
-		var arg = '[floodnet] ' + arguments[i];
+		var arg = NAME + arguments[i];
 		console.log(arg);
+	}
+};
+
+exports.error = function () {
+
+	if (exports.config.logger) {
+		for (var key in arguments) {
+			exports.config.logger.error(arguments[key]);
+		}
+	}
+
+	if (!exports.config.debug) {
+		return;
+	}
+
+	for (var i in arguments) {
+		var arg = NAME + arguments[i];
+		console.error(arg);
 	}
 };

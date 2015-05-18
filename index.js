@@ -17,9 +17,7 @@ module.exports.setup = function (config, cb) {
 	
 	if (config) {
 		for (var key in config) {
-			if (!defaults.config.hasOwnProperty(key)) {
-				defaults.config[key] = config[key];
-			}
+			defaults.config[key] = config[key];
 		}
 	}
 
@@ -149,7 +147,7 @@ function startHeartbeat() {
 		setTimeout(heartbeat, defaults.config.heartbeatInterval);
 	};
 
-	defaults.log('start heartneat at: ' + defaults.config.heartbeatInterval + 'ms');
+	defaults.log('start heartbeat at: ' + defaults.config.heartbeatInterval + 'ms');
 
 	heartbeat();
 }

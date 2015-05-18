@@ -25,6 +25,7 @@ If `config` object is not given, the module will run with default values.
 	prefix: '__floodnet__' // default
 	reconnect: true // default
 	heartbeatInterval: 0 // default
+	logger: null // default
 	options: null // default
 }
 ```
@@ -40,6 +41,16 @@ If `config` object is not given, the module will run with default values.
 ###### `heartbeatInterval` is a interval number in millisecond to check the availability of other mesh nodes in the same channel. By setting this to 0, you can turn this feature off.
 
 ###### `options` is an object to configure redis client. The details are shown below.
+
+###### `logger` is a logging module object that can be given to log internal logs.
+
+**NOTE:** Supported logging modules:
+
+1. <a href="https://www.npmjs.com/package/winston" target="_blank">winston</a>
+
+2. <a href="https://www.npmjs.com/package/log4js">log4js</a>
+
+3. <a href="https://www.npmjs.com/package/gracelog">gracelog</a>
 
 ##### Option Object
 
