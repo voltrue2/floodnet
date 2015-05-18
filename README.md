@@ -52,6 +52,45 @@ If `config` object is not given, the module will run with default values.
 
 3. <a href="https://www.npmjs.com/package/gracelog">gracelog</a>
 
+Example for winston:
+
+```javascript
+var winston = require('winston');
+var flood = require('floodnet');
+var config = {
+	logger: winston
+};
+flood.setup(config, function () {
+
+});
+```
+
+Example for log4js:
+
+```javascript
+var log4 = require('log4js');
+var flood = require('floodnet');
+var config = {
+	logger: log4.getLogger()
+};
+flood.setup(config, function () {
+
+});
+```
+
+Example for winston:
+
+```javascript
+var gracelog = require('gracelog');
+var flood = require('floodnet');
+var config = {
+	logger: gracelog.create()
+};
+flood.setup(config, function () {
+
+});
+```
+
 ##### Option Object
 
 These optional values are used to optionally configure redis driver.
