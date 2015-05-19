@@ -95,8 +95,19 @@ defaults.event.on('error', function (error, type) {
 	module.exports.emit('error', error, type);
 });
 
-defaults.event.on('heartbeat', function (channel, msg) {
+defaults.event.on(defaults.BYE, function (channel, msg) {
+	if (nodes[channel] && nodes[channel][msg.id]) {
+		defaults.log('mesh node has gone offline: ' + msg.id);
+		delete nodes[channel][msg.id];
+		module.exports.emit('nodeRemoved', msg.id);
+	}
+});
 
+defaults.event.on(defaults.HELLO, handleHello);
+
+defaults.event.on('heartbeat', handleHello);
+
+function handleHello(channel, msg) {
 	var now = Date.now();	
 
 	if (!nodes[channel]) {
@@ -110,7 +121,7 @@ defaults.event.on('heartbeat', function (channel, msg) {
 	}
 
 	nodes[channel][msg.id] = now;
-});
+}
 
 function checkNodeStats(channel) {
 	if (nodes[channel]) {

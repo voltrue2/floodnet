@@ -13,6 +13,14 @@ flood.on('error', function (error, type) {
 	console.log('error', error, type);
 });
 
+flood.on('nodeAdded', function (id) {
+	console.log('new node:', id);
+});
+
+flood.on('nodeRemoved', function (id) {
+	console.log('node gone:', id);
+});
+
 flood.setup({ debug: false }, function (error) {
 
 	if (error) {

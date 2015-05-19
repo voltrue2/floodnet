@@ -217,7 +217,7 @@ flood.on('end', function (type) {
 
 The listener callback will have 1 argument which is the ID of the new added mesh node.
 
-**NOTE:** If `heartbeatInterval` is set to 0, this event will NOT be emitted
+**NOTE:** Even if `heartbeatInterval` is set to 0, this event WILL be emitted
 
 ```javascript
 var flood = require('floodnet');
@@ -232,7 +232,7 @@ flood.on('nodeAdded', function (newNodeId) {
 
 The listener callback will have 1 argument which is the ID of the removed mesh node.
 
-**NOTE:** If `heartbeatInterval` is set to 0, this event will NOT be emitted
+**NOTE:** Even if `heartbeatInterval` is set to 0, this event WILL be emitted
 
 ```javascript
 var flood = require('floodnet');
