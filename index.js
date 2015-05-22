@@ -124,17 +124,19 @@ function handleHello(channel, msg) {
 }
 
 function checkNodeStats(channel) {
-	if (nodes[channel]) {
-		var now = Date.now();
-		var exp = defaults.config.heartbeatInterval * 2;
-		for (var id in nodes[channel]) {
-			var nodeLastSeen = nodes[channel][id];
-			if (now - nodeLastSeen >= exp) {
-				defaults.log('mesh node has timed out and considered off line: ' + id);
-				delete nodes[channel][id];
-				module.exports.emit('nodeRemoved', id);
-			}
+	if (!nodes[channel]) {
+		return;
+	}
+	var now = Date.now();
+	var exp = defaults.config.heartbeatInterval * 2;
+	for (var id in nodes[channel]) {
+		var nodeLastSeen = nodes[channel][id];
+		if (now - nodeLastSeen < exp) {
+			continue;
 		}
+		defaults.log('mesh node has timed out and considered off line: ' + id);
+		delete nodes[channel][id];
+		module.exports.emit('nodeRemoved', id);
 	}
 }
 
